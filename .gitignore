@@ -54,3 +54,26 @@ pids
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Node
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.*
+
+# SQLite WAL & SHM (archivos temporales)
+data/*.db-wal
+data/*.db-shm
+
+# Mantener el archivo principal de la base en Git
+!data/sistema_tracking.db
+
+# IDE/Editor configs
+.vscode/
+.idea/
+*.swp
