@@ -5,15 +5,16 @@ import { AppService } from './app.service';
 import { DepartamentosModule } from './departamentos/departamentos.module';
 
 @Module({
-  imports: [DepartamentosModule],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'data/sistema_tracking.db',
+      autoLoadEntities: true,
+      synchronize: true, // solo en dev
+    }),
+    DepartamentosModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
-
-TypeOrmModule.forRoot({
-  type: 'sqlite',
-  database: 'data/sistema_tracking.db',
-  autoLoadEntities: true,
-  synchronize: true,
-});

@@ -1,26 +1,41 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateDepartamentoDto } from './dto/create-departamento.dto';
 import { UpdateDepartamentoDto } from './dto/update-departamento.dto';
+import { Departamento } from './entities/departamento.entity';
 
 @Injectable()
 export class DepartamentosService {
-  create(createDepartamentoDto: CreateDepartamentoDto) {
-    return 'This action adds a new departamento';
+  constructor(
+    @InjectRepository(Departamento)
+    private readonly repo: Repository<Departamento>,
+  ) {}
+
+  create(dto: CreateDepartamentoDto) {
+    const dep = this.repo.create(dto);
+    return this.repo.save(dep);
   }
 
   findAll() {
-    return `This action returns all departamentos`;
+    return this.repo.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} departamento`;
+  async findOne(id: number) {
+    const dep = await this.repo.findOne({ where: { id } });
+    if (!dep) throw new NotFoundException('Departamento no encontrado');
+    return dep;
   }
 
-  update(id: number, updateDepartamentoDto: UpdateDepartamentoDto) {
-    return `This action updates a #${id} departamento`;
+  async update(id: number, dto: UpdateDepartamentoDto) {
+    const dep = await this.findOne(id);
+    Object.assign(dep, dto);
+    return this.repo.save(dep);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} departamento`;
+  async remove(id: number) {
+    const dep = await this.findOne(id);
+    await this.repo.remove(dep);
+    return { deleted: true };
   }
 }
