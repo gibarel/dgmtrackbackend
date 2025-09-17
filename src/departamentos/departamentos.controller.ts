@@ -1,34 +1,46 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { DepartamentosService } from './departamentos.service';
 import { CreateDepartamentoDto } from './dto/create-departamento.dto';
 import { UpdateDepartamentoDto } from './dto/update-departamento.dto';
 
 @Controller('departamentos')
 export class DepartamentosController {
-  constructor(private readonly departamentosService: DepartamentosService) {}
+  constructor(private readonly service: DepartamentosService) {}
 
   @Post()
-  create(@Body() createDepartamentoDto: CreateDepartamentoDto) {
-    return this.departamentosService.create(createDepartamentoDto);
+  create(@Body() dto: CreateDepartamentoDto) {
+    return this.service.create(dto);
   }
 
   @Get()
-  findAll() {
-    return this.departamentosService.findAll();
+  findAll(@Query('skip') skip?: string, @Query('take') take?: string) {
+    const s = skip ? Number(skip) : 0;
+    const t = take ? Number(take) : 50;
+    return this.service.findAll(s, t);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.departamentosService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.service.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDepartamentoDto: UpdateDepartamentoDto) {
-    return this.departamentosService.update(+id, updateDepartamentoDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateDepartamentoDto) {
+    return this.service.update(id, dto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.departamentosService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.service.remove(id);
   }
 }

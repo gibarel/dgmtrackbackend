@@ -17,8 +17,8 @@ export class DepartamentosService {
     return this.repo.save(dep);
   }
 
-  findAll() {
-    return this.repo.find();
+  findAll(skip = 0, take = 50) {
+    return this.repo.find({ skip, take, order: { id: 'DESC' } });
   }
 
   async findOne(id: number) {
