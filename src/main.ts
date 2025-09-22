@@ -7,9 +7,9 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true, // elimina propiedades extra
-      forbidNonWhitelisted: true, // si mandan props de más, error 400
-      transform: true, // transforma tipos (params/query) a number/boolean/etc
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
     }),
   );
 
