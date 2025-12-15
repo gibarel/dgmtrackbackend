@@ -77,3 +77,4 @@ data/*.db-shm
 .vscode/
 .idea/
 *.swp
+data/*.db
