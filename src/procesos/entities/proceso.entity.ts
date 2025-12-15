@@ -49,6 +49,15 @@ export class Proceso {
   @Column({ default: true })
   activo: boolean;
 
+  @Column({ type: 'text', nullable: true })
+  descripcion?: string;
+
+  @Column({ type: 'int', nullable: true })
+  diasEstimados?: number;
+
+  @Column({ type: 'text', nullable: true })
+  observaciones?: string;
+
   // Relaciones
   @ManyToMany(() => Dependencia, { eager: true })
   @JoinTable()
