@@ -1,8 +1,11 @@
-import { IsBoolean, IsInt, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsIn, IsInt, IsOptional, IsString } from 'class-validator';
+
+const ESTADOS_REQ = ['pendiente', 'en_gestion', 'completo', 'no_aplica'] as const;
 
 export class CreateRequisitoDto {
+  @IsOptional()
   @IsInt()
-  orden: number;
+  orden?: number; // se ignora, lo calcula el backend
 
   @IsString()
   descripcion: string;
@@ -13,7 +16,8 @@ export class CreateRequisitoDto {
 
   @IsOptional()
   @IsString()
-  estado?: 'pendiente' | 'en_gestion' | 'completo' | 'no_aplica';
+  @IsIn(ESTADOS_REQ)
+  estado?: string;
 
   @IsOptional()
   @IsString()

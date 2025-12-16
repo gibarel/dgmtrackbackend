@@ -26,12 +26,25 @@ export class RequisitosService {
     const proceso = await this.procesosRepo.findOne({ where: { id: procesoId } });
     if (!proceso) throw new NotFoundException('Proceso no encontrado');
 
-    const req = this.repo.create({
-      ...dto,
-      proceso,
-      aplica: dto.aplica ?? true,
-      estado: dto.estado ?? 'pendiente',
-    });
+    // Orden incremental automático: max(orden)+1 para ese proceso
+    const raw = await this.repo
+      .createQueryBuilder('r')
+      .select('COALESCE(MAX(r.orden), 0)', 'max')
+      .where('r.procesoId = :procesoId', { procesoId })
+      .getRawOne<{ max: number | string }>();
+
+    const orden = Number(raw?.max ?? 0) + 1;
+
+    const req = this.repo.create();
+
+    req.proceso = proceso;
+    req.orden = orden;
+    req.descripcion = dto.descripcion;
+    req.aplica = dto.aplica ?? true;
+    req.estado = (dto.estado as any) ?? 'pendiente';
+    req.responsableTexto = dto.responsableTexto;
+    req.observaciones = dto.observaciones;
+    req.diasEstimados = dto.diasEstimados;
 
     return this.repo.save(req);
   }
@@ -40,7 +53,10 @@ export class RequisitosService {
     const req = await this.repo.findOne({ where: { id } });
     if (!req) throw new NotFoundException('Requisito no encontrado');
 
-    Object.assign(req, dto);
+    // Regla: no permitimos cambiar "orden" por update (si lo querés, lo hacemos después)
+    const { orden, ...rest } = dto as any;
+    Object.assign(req, rest);
+
     return this.repo.save(req);
   }
 

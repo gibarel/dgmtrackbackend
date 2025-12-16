@@ -50,9 +50,6 @@ export class CreateProcesoDto {
   @IsNumber()
   montoPrevisto?: number;
 
-  @IsOptional()
-  @IsString()
-  observaciones?: string;
 
   @IsOptional()
   @IsBoolean()
@@ -62,4 +59,21 @@ export class CreateProcesoDto {
   @IsArray()
   @ArrayUnique()
   dependenciasIds?: number[];
+
+  @IsOptional()
+  @IsString()
+  caso?: string;
+
+  @IsOptional()
+  @IsString()
+  situacionActual?: string;
+
+  @IsOptional()
+  @IsString()
+  puntosPrincipales?: string;
+
+  @IsOptional()
+  @IsString()
+  observaciones?: string;
+
 }

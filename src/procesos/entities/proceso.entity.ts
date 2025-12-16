@@ -2,7 +2,6 @@ import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColum
 import { Dependencia } from '../../dependencias/entities/dependencia.entity';
 import { RequisitoProceso } from '../../requisitos/entities/requisito-proceso.entity';
 
-
 @Entity()
 export class Proceso {
   @PrimaryGeneratedColumn()

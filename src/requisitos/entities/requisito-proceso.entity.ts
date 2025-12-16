@@ -1,15 +1,19 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Proceso } from '../../procesos/entities/proceso.entity';
 
-@Entity()
+export type EstadoRequisito = 'pendiente' | 'en_gestion' | 'completo' | 'no_aplica';
+
+@Entity('requisitos_proceso')
+@Unique(['proceso', 'orden'])
 export class RequisitoProceso {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Proceso, (p: Proceso) => p.requisitos, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Proceso, (p) => p.requisitos, { onDelete: 'CASCADE' })
+  @Index()
   proceso: Proceso;
 
-  @Column()
+  @Column({ type: 'int' })
   orden: number;
 
   @Column({ type: 'text' })
@@ -19,7 +23,7 @@ export class RequisitoProceso {
   aplica: boolean;
 
   @Column({ type: 'text', default: 'pendiente' })
-  estado: 'pendiente' | 'en_gestion' | 'completo' | 'no_aplica';
+  estado: EstadoRequisito;
 
   @Column({ nullable: true })
   responsableTexto?: string;
