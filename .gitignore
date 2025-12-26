@@ -78,3 +78,7 @@ data/*.db-shm
 .idea/
 *.swp
 data/*.db
+
+# local
+src.tar.xz
+data/*.db
